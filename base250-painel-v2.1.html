@@ -1,0 +1,2020 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BASE250 - Gestão de Imóveis</title>
+
+  <!-- INTER (OBRIGATÓRIA) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* =========================
+       DESIGN SYSTEM v1.0 - BASE250
+       ========================= */
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    :root {
+      /* CORES PRIMÁRIAS (Identidade BASE250) */
+      --cor-primaria: #16697A;
+      --cor-primaria-hover: #125a69;
+      --cor-primaria-light: #1a7a8f;
+      --cor-primaria-dark: #0f4a56;
+      --cor-primaria-bg: rgba(22, 105, 122, 0.08);
+
+      /* CORES DE FUNDO */
+      --bg: #f9fafb;
+      --bg-sidebar: #ffffff;
+      --bg-card: #ffffff;
+      --bg-header: #16697A;
+
+      /* CORES DE TEXTO */
+      --text: #111827;
+      --text-light: #6b7280;
+      --text-muted: #9ca3af;
+      --text-white: #ffffff;
+
+      /* BORDAS */
+      --border: #e5e7eb;
+      --border-light: #f3f4f6;
+
+      /* CORES DE STATUS */
+      --success: #16a34a;
+      --success-light: #dcfce7;
+      --warning: #f59e0b;
+      --warning-light: #fef3c7;
+      --error: #dc2626;
+      --error-light: #fee2e2;
+      --info: #0ea5e9;
+      --info-light: #e0f2fe;
+
+      /* SOMBRAS */
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+
+      /* DIMENSÕES */
+      --sidebar-width: 280px;
+      --header-height: 64px;
+      --border-radius: 8px;
+      --border-radius-lg: 14px;
+    }
+
+    html, body {
+      height: 100%;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1.5;
+    }
+
+    /* =========================
+       LAYOUT PRINCIPAL
+       ========================= */
+
+    .app-container {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .app-main {
+      display: flex;
+      flex: 1;
+      padding-top: var(--header-height);
+    }
+
+    /* =========================
+       HEADER
+       ========================= */
+
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--header-height);
+      background: var(--bg-header);
+      color: var(--text-white);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      z-index: 1000;
+      box-shadow: var(--shadow-md);
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: flex-end;
+      gap: 2px;
+    }
+
+    .logo-icon .bar {
+      background: var(--text-white);
+      border-radius: 2px;
+    }
+
+    .logo-icon .bar-1 { width: 10px; height: 28px; }
+    .logo-icon .bar-2 { width: 10px; height: 36px; transform: skewX(-8deg); }
+    .logo-icon .bar-3 { width: 10px; height: 28px; }
+
+    .logo-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .logo-text .brand {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+    }
+
+    .logo-text .tagline {
+      font-size: 11px;
+      font-weight: 500;
+      opacity: 0.85;
+      letter-spacing: 0.02em;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .header-datetime {
+      font-size: 13px;
+      opacity: 0.9;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .header-user {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(255, 255, 255, 0.15);
+      padding: 6px 14px 6px 6px;
+      border-radius: 24px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .header-user:hover {
+      background: rgba(255, 255, 255, 0.25);
+    }
+
+    .user-avatar {
+      width: 32px;
+      height: 32px;
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 13px;
+    }
+
+    .user-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .user-name {
+      font-size: 13px;
+      font-weight: 600;
+      line-height: 1.2;
+    }
+
+    .user-role {
+      font-size: 11px;
+      opacity: 0.8;
+    }
+
+    .menu-toggle {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--text-white);
+      font-size: 24px;
+      cursor: pointer;
+      padding: 8px;
+    }
+
+    /* =========================
+       SIDEBAR COM ACCORDION
+       ========================= */
+
+    .sidebar {
+      position: fixed;
+      top: var(--header-height);
+      left: 0;
+      bottom: 0;
+      width: var(--sidebar-width);
+      background: var(--bg-sidebar);
+      border-right: 1px solid var(--border);
+      overflow-y: auto;
+      z-index: 900;
+      transition: transform 0.3s ease;
+    }
+
+    .sidebar::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .sidebar::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .sidebar::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 3px;
+    }
+
+    .sidebar::-webkit-scrollbar-thumb:hover {
+      background: var(--text-muted);
+    }
+
+    .sidebar-content {
+      padding: 12px 0;
+    }
+
+    /* MENU ACCORDION */
+    .nav-section {
+      margin-bottom: 4px;
+    }
+
+    .nav-section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 20px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border-left: 4px solid transparent;
+      user-select: none;
+    }
+
+    .nav-section-header:hover {
+      background: var(--bg);
+    }
+
+    .nav-section.active > .nav-section-header {
+      background: var(--cor-primaria-bg);
+      border-left-color: var(--cor-primaria);
+    }
+
+    .nav-section-icon {
+      width: 36px;
+      height: 36px;
+      background: var(--bg);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+      transition: all 0.2s;
+    }
+
+    .nav-section.active > .nav-section-header .nav-section-icon {
+      background: var(--cor-primaria);
+      color: var(--text-white);
+    }
+
+    .nav-section-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .nav-section-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.3;
+    }
+
+    .nav-section.active > .nav-section-header .nav-section-title {
+      color: var(--cor-primaria);
+    }
+
+    .nav-section-desc {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .nav-section-arrow {
+      font-size: 12px;
+      color: var(--text-muted);
+      transition: transform 0.3s ease;
+      flex-shrink: 0;
+    }
+
+    .nav-section.open > .nav-section-header .nav-section-arrow {
+      transform: rotate(180deg);
+    }
+
+    /* SUBITENS */
+    .nav-section-items {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+      background: var(--bg);
+    }
+
+    .nav-section.open .nav-section-items {
+      max-height: 500px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 20px 10px 72px;
+      color: var(--text-light);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      border-left: 4px solid transparent;
+    }
+
+    .nav-item:hover {
+      background: rgba(22, 105, 122, 0.05);
+      color: var(--cor-primaria);
+    }
+
+    .nav-item.active {
+      background: rgba(22, 105, 122, 0.1);
+      color: var(--cor-primaria);
+      font-weight: 600;
+      border-left-color: var(--cor-primaria);
+    }
+
+    .nav-item-icon {
+      font-size: 14px;
+      width: 20px;
+      text-align: center;
+    }
+
+    .nav-badge {
+      margin-left: auto;
+      background: var(--error);
+      color: var(--text-white);
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 10px;
+      min-width: 18px;
+      text-align: center;
+    }
+
+    .nav-badge.warning {
+      background: var(--warning);
+    }
+
+    .nav-badge.info {
+      background: var(--info);
+    }
+
+    .nav-badge.success {
+      background: var(--success);
+    }
+
+    /* SIDEBAR FOOTER */
+    .sidebar-footer {
+      padding: 16px 20px;
+      border-top: 1px solid var(--border);
+      margin-top: 12px;
+    }
+
+    .sidebar-footer-info {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-align: center;
+      line-height: 1.5;
+    }
+
+    /* =========================
+       CONTEÚDO PRINCIPAL
+       ========================= */
+
+    .content {
+      flex: 1;
+      margin-left: var(--sidebar-width);
+      padding: 24px;
+      min-height: calc(100vh - var(--header-height));
+    }
+
+    .content-header {
+      margin-bottom: 24px;
+    }
+
+    .page-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .page-title .icon {
+      font-size: 28px;
+    }
+
+    .page-subtitle {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .page-breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 8px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .page-breadcrumb a {
+      color: var(--cor-primaria);
+      text-decoration: none;
+    }
+
+    .page-breadcrumb a:hover {
+      text-decoration: underline;
+    }
+
+    /* =========================
+       PAINÉIS
+       ========================= */
+
+    .panel {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--border-radius-lg);
+      overflow: hidden;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .panel-header {
+      background: var(--cor-primaria);
+      color: var(--text-white);
+      padding: 16px 24px;
+      font-size: 16px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .panel-header .icon {
+      font-size: 20px;
+    }
+
+    .panel-header-light {
+      background: var(--bg);
+      color: var(--text);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .panel-body {
+      padding: 24px;
+    }
+
+    .panel-footer {
+      padding: 16px 24px;
+      background: var(--bg);
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+    }
+
+    /* =========================
+       CARDS
+       ========================= */
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--border-radius);
+      padding: 20px;
+      transition: all 0.2s ease;
+    }
+
+    .card:hover {
+      box-shadow: var(--shadow-md);
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+    }
+
+    .card-stat {
+      border-top: 4px solid var(--cor-primaria);
+      cursor: pointer;
+    }
+
+    .card-stat:hover {
+      transform: translateY(-2px);
+    }
+
+    .card-stat.success { border-top-color: var(--success); }
+    .card-stat.warning { border-top-color: var(--warning); }
+    .card-stat.error { border-top-color: var(--error); }
+    .card-stat.info { border-top-color: var(--info); }
+
+    .card-stat-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .card-stat-icon {
+      width: 44px;
+      height: 44px;
+      background: var(--cor-primaria-bg);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+    }
+
+    .card-stat.success .card-stat-icon { background: var(--success-light); }
+    .card-stat.warning .card-stat-icon { background: var(--warning-light); }
+    .card-stat.error .card-stat-icon { background: var(--error-light); }
+    .card-stat.info .card-stat-icon { background: var(--info-light); }
+
+    .card-stat-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      margin-bottom: 6px;
+    }
+
+    .card-stat-value {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--cor-primaria);
+      line-height: 1.1;
+    }
+
+    .card-stat.success .card-stat-value { color: var(--success); }
+    .card-stat.warning .card-stat-value { color: var(--warning); }
+    .card-stat.error .card-stat-value { color: var(--error); }
+    .card-stat.info .card-stat-value { color: var(--info); }
+
+    .card-stat-info {
+      font-size: 13px;
+      color: var(--text-light);
+      margin-top: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .card-stat-trend {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    .card-stat-trend.up {
+      background: var(--success-light);
+      color: var(--success);
+    }
+
+    .card-stat-trend.down {
+      background: var(--error-light);
+      color: var(--error);
+    }
+
+    /* CARD DE ATALHO */
+    .card-shortcut {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 20px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .card-shortcut:hover {
+      border-color: var(--cor-primaria);
+      transform: translateY(-2px);
+    }
+
+    .card-shortcut-icon {
+      width: 56px;
+      height: 56px;
+      background: var(--cor-primaria-bg);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      flex-shrink: 0;
+    }
+
+    .card-shortcut-info h4 {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .card-shortcut-info p {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .card-shortcut-arrow {
+      margin-left: auto;
+      font-size: 18px;
+      color: var(--text-muted);
+      transition: transform 0.2s;
+    }
+
+    .card-shortcut:hover .card-shortcut-arrow {
+      transform: translateX(4px);
+      color: var(--cor-primaria);
+    }
+
+    /* =========================
+       BADGES
+       ========================= */
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 10px;
+      font-size: 12px;
+      font-weight: 600;
+      border-radius: 999px;
+      color: var(--text-white);
+    }
+
+    .badge.primary { background: var(--cor-primaria); }
+    .badge.success { background: var(--success); }
+    .badge.warning { background: var(--warning); }
+    .badge.error { background: var(--error); }
+    .badge.info { background: var(--info); }
+
+    /* =========================
+       BOTÕES
+       ========================= */
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 18px;
+      border-radius: var(--border-radius);
+      border: none;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    .btn-primary {
+      background: var(--cor-primaria);
+      color: var(--text-white);
+    }
+
+    .btn-primary:hover {
+      background: var(--cor-primaria-hover);
+      box-shadow: var(--shadow-md);
+    }
+
+    .btn-secondary {
+      background: var(--bg);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .btn-secondary:hover {
+      background: var(--border-light);
+    }
+
+    .btn-success {
+      background: var(--success);
+      color: var(--text-white);
+    }
+
+    .btn-danger {
+      background: var(--error);
+      color: var(--text-white);
+    }
+
+    .btn-sm {
+      padding: 6px 12px;
+      font-size: 13px;
+    }
+
+    .btn-lg {
+      padding: 14px 24px;
+      font-size: 16px;
+    }
+
+    /* =========================
+       TABELAS
+       ========================= */
+
+    .table-container {
+      overflow-x: auto;
+    }
+
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    .table thead {
+      background: var(--bg);
+    }
+
+    .table th {
+      padding: 12px 16px;
+      text-align: left;
+      font-weight: 600;
+      color: var(--cor-primaria);
+      border-bottom: 2px solid var(--border);
+    }
+
+    .table td {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .table tbody tr:hover {
+      background: var(--bg);
+    }
+
+    .table tbody tr {
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    /* =========================
+       ALERTAS
+       ========================= */
+
+    .alert {
+      padding: 14px 18px;
+      border-radius: var(--border-radius);
+      font-size: 14px;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .alert-icon {
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .alert-info {
+      background: var(--info-light);
+      border-left: 4px solid var(--info);
+      color: #0369a1;
+    }
+
+    .alert-success {
+      background: var(--success-light);
+      border-left: 4px solid var(--success);
+      color: #166534;
+    }
+
+    .alert-warning {
+      background: var(--warning-light);
+      border-left: 4px solid var(--warning);
+      color: #92400e;
+    }
+
+    .alert-error {
+      background: var(--error-light);
+      border-left: 4px solid var(--error);
+      color: #991b1b;
+    }
+
+    /* =========================
+       PÁGINAS
+       ========================= */
+
+    .page {
+      display: none;
+    }
+
+    .page.active {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* =========================
+       FORMULÁRIOS
+       ========================= */
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .form-input,
+    .form-select,
+    .form-textarea {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      border-radius: var(--border-radius);
+      font-size: 14px;
+      font-family: inherit;
+      transition: all 0.2s;
+      background: var(--bg-card);
+    }
+
+    .form-input:focus,
+    .form-select:focus,
+    .form-textarea:focus {
+      outline: none;
+      border-color: var(--cor-primaria);
+      box-shadow: 0 0 0 3px rgba(22, 105, 122, 0.15);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+    }
+
+    /* =========================
+       MODAL
+       ========================= */
+
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+      animation: fadeIn 0.2s ease;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal {
+      background: var(--bg-card);
+      border-radius: var(--border-radius-lg);
+      max-width: 600px;
+      width: 90%;
+      max-height: 90vh;
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
+      animation: slideUp 0.3s ease;
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .modal-header {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .modal-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--cor-primaria);
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 24px;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .modal-close:hover {
+      color: var(--error);
+    }
+
+    .modal-body {
+      padding: 24px;
+      overflow-y: auto;
+      max-height: 60vh;
+    }
+
+    .modal-footer {
+      padding: 16px 24px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      background: var(--bg);
+    }
+
+    /* =========================
+       TOAST
+       ========================= */
+
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--text);
+      color: var(--text-white);
+      padding: 14px 20px;
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow-lg);
+      z-index: 3000;
+      animation: slideInUp 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .toast.success { background: var(--success); }
+    .toast.error { background: var(--error); }
+
+    @keyframes slideInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* =========================
+       RESPONSIVO
+       ========================= */
+
+    @media (max-width: 1024px) {
+      :root {
+        --sidebar-width: 260px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .menu-toggle {
+        display: block;
+      }
+
+      .sidebar {
+        transform: translateX(-100%);
+      }
+
+      .sidebar.open {
+        transform: translateX(0);
+      }
+
+      .content {
+        margin-left: 0;
+      }
+
+      .header-datetime {
+        display: none;
+      }
+
+      .user-info {
+        display: none;
+      }
+
+      .card-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+
+      .page-title {
+        font-size: 20px;
+      }
+    }
+
+    /* =========================
+       UTILITÁRIOS
+       ========================= */
+
+    .text-center { text-align: center; }
+    .text-right { text-align: right; }
+    .text-muted { color: var(--text-muted); }
+    .text-success { color: var(--success); }
+    .text-error { color: var(--error); }
+
+    .mt-1 { margin-top: 8px; }
+    .mt-2 { margin-top: 16px; }
+    .mt-3 { margin-top: 24px; }
+    .mb-1 { margin-bottom: 8px; }
+    .mb-2 { margin-bottom: 16px; }
+    .mb-3 { margin-bottom: 24px; }
+
+    .flex { display: flex; }
+    .flex-between { justify-content: space-between; }
+    .flex-center { align-items: center; }
+    .flex-wrap { flex-wrap: wrap; }
+    .gap-1 { gap: 8px; }
+    .gap-2 { gap: 16px; }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    
+    <!-- ========== HEADER ========== -->
+    <header class="header">
+      <div class="header-left">
+        <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+        
+        <div class="logo-container">
+          <div class="logo-icon">
+            <div class="bar bar-1"></div>
+            <div class="bar bar-2"></div>
+            <div class="bar bar-3"></div>
+          </div>
+          <div class="logo-text">
+            <span class="brand">BASE250</span>
+            <span class="tagline">Gestão de Imóveis</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <div class="header-datetime">
+          <span>📅</span>
+          <span id="datetime">Carregando...</span>
+        </div>
+
+        <div class="header-user">
+          <div class="user-avatar">ED</div>
+          <div class="user-info">
+            <span class="user-name">Eng. Diogo</span>
+            <span class="user-role">Administrador</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- ========== LAYOUT PRINCIPAL ========== -->
+    <div class="app-main">
+      
+      <!-- ========== SIDEBAR ACCORDION ========== -->
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-content">
+          
+          <!-- 1️⃣ PAINEL GERAL -->
+          <div class="nav-section active open" data-section="geral">
+            <div class="nav-section-header" onclick="toggleSection('geral')">
+              <div class="nav-section-icon">📊</div>
+              <div class="nav-section-info">
+                <div class="nav-section-title">Painel Geral</div>
+                <div class="nav-section-desc">Visão macro do sistema</div>
+              </div>
+              <span class="nav-section-arrow">▼</span>
+            </div>
+            <div class="nav-section-items">
+              <a class="nav-item active" onclick="navigateTo('dashboard', this)">
+                <span class="nav-item-icon">🏠</span>
+                Dashboard
+              </a>
+              <a class="nav-item" onclick="navigateTo('status-sistema', this)">
+                <span class="nav-item-icon">⚡</span>
+                Status do Sistema
+              </a>
+              <a class="nav-item" onclick="navigateTo('resumo', this)">
+                <span class="nav-item-icon">📈</span>
+                Resumo Geral
+              </a>
+            </div>
+          </div>
+
+          <!-- 2️⃣ PAINEL ADMINISTRATIVO -->
+          <div class="nav-section" data-section="admin">
+            <div class="nav-section-header" onclick="toggleSection('admin')">
+              <div class="nav-section-icon">⚙️</div>
+              <div class="nav-section-info">
+                <div class="nav-section-title">Administrativo</div>
+                <div class="nav-section-desc">Gestão operacional</div>
+              </div>
+              <span class="nav-badge">3</span>
+              <span class="nav-section-arrow">▼</span>
+            </div>
+            <div class="nav-section-items">
+              <a class="nav-item" onclick="navigateTo('cadastro-inquilinos', this)">
+                <span class="nav-item-icon">👤</span>
+                Cadastro de Inquilinos
+                <span class="nav-badge warning">3</span>
+              </a>
+              <a class="nav-item" onclick="navigateTo('aprovacoes', this)">
+                <span class="nav-item-icon">✅</span>
+                Aprovação / Reprovação
+              </a>
+              <a class="nav-item" onclick="navigateTo('checklist', this)">
+                <span class="nav-item-icon">📋</span>
+                Checklist de Documentos
+              </a>
+              <a class="nav-item" onclick="navigateTo('observacoes', this)">
+                <span class="nav-item-icon">📝</span>
+                Observações Internas
+              </a>
+              <a class="nav-item" onclick="navigateTo('emissao-pdf', this)">
+                <span class="nav-item-icon">📄</span>
+                Emissão de PDFs
+              </a>
+              <a class="nav-item" onclick="navigateTo('reajuste-igpm', this)">
+                <span class="nav-item-icon">📊</span>
+                Reajuste IGPM
+              </a>
+              <a class="nav-item" onclick="navigateTo('acoes-admin', this)">
+                <span class="nav-item-icon">🔧</span>
+                Ações Administrativas
+              </a>
+            </div>
+          </div>
+
+          <!-- 3️⃣ PAINEL FINANCEIRO -->
+          <div class="nav-section" data-section="financeiro">
+            <div class="nav-section-header" onclick="toggleSection('financeiro')">
+              <div class="nav-section-icon">💰</div>
+              <div class="nav-section-info">
+                <div class="nav-section-title">Financeiro</div>
+                <div class="nav-section-desc">Controle de pagamentos</div>
+              </div>
+              <span class="nav-badge error">2</span>
+              <span class="nav-section-arrow">▼</span>
+            </div>
+            <div class="nav-section-items">
+              <a class="nav-item" onclick="navigateTo('pagamentos', this)">
+                <span class="nav-item-icon">💳</span>
+                Tabela de Pagamentos
+                <span class="nav-badge error">2</span>
+              </a>
+              <a class="nav-item" onclick="navigateTo('comprovantes', this)">
+                <span class="nav-item-icon">📎</span>
+                Upload de Comprovantes
+              </a>
+              <a class="nav-item" onclick="navigateTo('resumo-mensal', this)">
+                <span class="nav-item-icon">📅</span>
+                Resumo Mensal
+              </a>
+              <a class="nav-item" onclick="navigateTo('graficos', this)">
+                <span class="nav-item-icon">📉</span>
+                Gráficos
+              </a>
+              <a class="nav-item" onclick="navigateTo('exportacao', this)">
+                <span class="nav-item-icon">📤</span>
+                Exportação Excel/PDF
+              </a>
+            </div>
+          </div>
+
+          <!-- 4️⃣ ÁREA DO INQUILINO -->
+          <div class="nav-section" data-section="inquilino">
+            <div class="nav-section-header" onclick="toggleSection('inquilino')">
+              <div class="nav-section-icon">👥</div>
+              <div class="nav-section-info">
+                <div class="nav-section-title">Área do Inquilino</div>
+                <div class="nav-section-desc">Portal do usuário</div>
+              </div>
+              <span class="nav-section-arrow">▼</span>
+            </div>
+            <div class="nav-section-items">
+              <a class="nav-item" onclick="navigateTo('meus-dados', this)">
+                <span class="nav-item-icon">📋</span>
+                Meus Dados
+              </a>
+              <a class="nav-item" onclick="navigateTo('meu-contrato', this)">
+                <span class="nav-item-icon">📄</span>
+                Contrato
+              </a>
+              <a class="nav-item" onclick="navigateTo('meus-documentos', this)">
+                <span class="nav-item-icon">📁</span>
+                Documentos
+              </a>
+              <a class="nav-item" onclick="navigateTo('meus-pagamentos', this)">
+                <span class="nav-item-icon">💰</span>
+                Pagamentos
+              </a>
+              <a class="nav-item" onclick="navigateTo('minhas-notificacoes', this)">
+                <span class="nav-item-icon">🔔</span>
+                Notificações
+                <span class="nav-badge info">5</span>
+              </a>
+              <a class="nav-item" onclick="navigateTo('govbr', this)">
+                <span class="nav-item-icon">🏛️</span>
+                Integração Gov.br
+              </a>
+            </div>
+          </div>
+
+          <!-- 5️⃣ CENTRO DE CONFIGURAÇÕES -->
+          <div class="nav-section" data-section="config">
+            <div class="nav-section-header" onclick="toggleSection('config')">
+              <div class="nav-section-icon">🔧</div>
+              <div class="nav-section-info">
+                <div class="nav-section-title">Configurações</div>
+                <div class="nav-section-desc">Administração do sistema</div>
+              </div>
+              <span class="nav-section-arrow">▼</span>
+            </div>
+            <div class="nav-section-items">
+              <a class="nav-item" onclick="navigateTo('versoes-contrato', this)">
+                <span class="nav-item-icon">📑</span>
+                Versões de Contrato
+              </a>
+              <a class="nav-item" onclick="navigateTo('templates-email', this)">
+                <span class="nav-item-icon">✉️</span>
+                Templates de E-mail
+              </a>
+              <a class="nav-item" onclick="navigateTo('regras-notificacao', this)">
+                <span class="nav-item-icon">⏰</span>
+                Regras de Notificação
+              </a>
+              <a class="nav-item" onclick="navigateTo('dados-locador', this)">
+                <span class="nav-item-icon">🏢</span>
+                Dados do Locador
+              </a>
+              <a class="nav-item" onclick="navigateTo('backup', this)">
+                <span class="nav-item-icon">💾</span>
+                Backup
+              </a>
+              <a class="nav-item" onclick="navigateTo('logs', this)">
+                <span class="nav-item-icon">📜</span>
+                Logs de Auditoria
+              </a>
+              <a class="nav-item" onclick="navigateTo('parametros', this)">
+                <span class="nav-item-icon">⚙️</span>
+                Parâmetros Globais
+              </a>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="sidebar-footer">
+          <div class="sidebar-footer-info">
+            BASE250 v1.0<br>
+            © 2025 - Todos os direitos reservados
+          </div>
+        </div>
+      </aside>
+
+      <!-- ========== CONTEÚDO PRINCIPAL ========== -->
+      <main class="content">
+        
+        <!-- =============================================
+             1️⃣ PAINEL GERAL - PÁGINAS
+             ============================================= -->
+        
+        <!-- DASHBOARD -->
+        <div id="page-dashboard" class="page active">
+          <div class="content-header">
+            <h1 class="page-title">
+              <span class="icon">📊</span>
+              Dashboard
+            </h1>
+            <p class="page-subtitle">Visão geral do sistema BASE250</p>
+          </div>
+
+          <!-- CARDS DE RESUMO -->
+          <div class="card-grid mb-3">
+            <div class="card card-stat success" onclick="navigateToSection('admin', 'cadastro-inquilinos')">
+              <div class="card-stat-header">
+                <div class="card-stat-icon">🏢</div>
+                <span class="card-stat-trend up">↑ 4%</span>
+              </div>
+              <div class="card-stat-label">Inquilinos Ativos</div>
+              <div class="card-stat-value">18</div>
+              <div class="card-stat-info">72% de ocupação</div>
+            </div>
+
+            <div class="card card-stat info" onclick="navigateToSection('financeiro', 'pagamentos')">
+              <div class="card-stat-header">
+                <div class="card-stat-icon">💰</div>
+              </div>
+              <div class="card-stat-label">Pagamentos do Mês</div>
+              <div class="card-stat-value">R$ 24.800</div>
+              <div class="card-stat-info">16 de 18 recebidos</div>
+            </div>
+
+            <div class="card card-stat warning" onclick="navigateToSection('admin', 'aprovacoes')">
+              <div class="card-stat-header">
+                <div class="card-stat-icon">⏳</div>
+              </div>
+              <div class="card-stat-label">Pendências</div>
+              <div class="card-stat-value">5</div>
+              <div class="card-stat-info">3 cadastros + 2 documentos</div>
+            </div>
+
+            <div class="card card-stat error" onclick="navigateToSection('financeiro', 'pagamentos')">
+              <div class="card-stat-header">
+                <div class="card-stat-icon">⚠️</div>
+              </div>
+              <div class="card-stat-label">Pagamentos Atrasados</div>
+              <div class="card-stat-value">2</div>
+              <div class="card-stat-info">R$ 2.800,00 em aberto</div>
+            </div>
+          </div>
+
+          <!-- ATALHOS PARA OS PAINÉIS -->
+          <div class="panel">
+            <div class="panel-header panel-header-light">
+              <span class="icon">🚀</span>
+              Acesso Rápido aos Painéis
+            </div>
+            <div class="panel-body">
+              <div class="card-grid">
+                <div class="card card-shortcut" onclick="openSection('admin')">
+                  <div class="card-shortcut-icon">⚙️</div>
+                  <div class="card-shortcut-info">
+                    <h4>Painel Administrativo</h4>
+                    <p>Cadastros, aprovações, documentos</p>
+                  </div>
+                  <span class="card-shortcut-arrow">→</span>
+                </div>
+
+                <div class="card card-shortcut" onclick="openSection('financeiro')">
+                  <div class="card-shortcut-icon">💰</div>
+                  <div class="card-shortcut-info">
+                    <h4>Painel Financeiro</h4>
+                    <p>Pagamentos, relatórios, exportação</p>
+                  </div>
+                  <span class="card-shortcut-arrow">→</span>
+                </div>
+
+                <div class="card card-shortcut" onclick="openSection('inquilino')">
+                  <div class="card-shortcut-icon">👥</div>
+                  <div class="card-shortcut-info">
+                    <h4>Área do Inquilino</h4>
+                    <p>Portal do usuário, Gov.br</p>
+                  </div>
+                  <span class="card-shortcut-arrow">→</span>
+                </div>
+
+                <div class="card card-shortcut" onclick="openSection('config')">
+                  <div class="card-shortcut-icon">🔧</div>
+                  <div class="card-shortcut-info">
+                    <h4>Configurações</h4>
+                    <p>Templates, backup, parâmetros</p>
+                  </div>
+                  <span class="card-shortcut-arrow">→</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- NOTIFICAÇÕES RECENTES -->
+          <div class="panel">
+            <div class="panel-header">
+              <span class="icon">🔔</span>
+              Notificações Recentes
+            </div>
+            <div class="panel-body">
+              <div class="alert alert-error">
+                <span class="alert-icon">🚨</span>
+                <div>
+                  <strong>Pagamento atrasado:</strong> Apto 105 - Carlos Eduardo está com 5 dias de atraso.
+                </div>
+              </div>
+              <div class="alert alert-warning">
+                <span class="alert-icon">⏳</span>
+                <div>
+                  <strong>Cadastro pendente:</strong> 3 novos cadastros aguardando validação de documentos.
+                </div>
+              </div>
+              <div class="alert alert-info">
+                <span class="alert-icon">📅</span>
+                <div>
+                  <strong>Reajuste próximo:</strong> 4 contratos vencem nos próximos 30 dias.
+                </div>
+              </div>
+              <div class="alert alert-success">
+                <span class="alert-icon">✅</span>
+                <div>
+                  <strong>Contrato assinado:</strong> Maria Silva (Apto 101) assinou o contrato digital.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- STATUS DO SISTEMA -->
+        <div id="page-status-sistema" class="page">
+          <div class="content-header">
+            <h1 class="page-title">
+              <span class="icon">⚡</span>
+              Status do Sistema
+            </h1>
+            <p class="page-subtitle">Monitoramento e saúde da plataforma</p>
+          </div>
+          <div class="alert alert-success">
+            <span class="alert-icon">✅</span>
+            <div><strong>Sistema Operacional</strong> - Todos os serviços funcionando normalmente.</div>
+          </div>
+        </div>
+
+        <!-- RESUMO -->
+        <div id="page-resumo" class="page">
+          <div class="content-header">
+            <h1 class="page-title">
+              <span class="icon">📈</span>
+              Resumo Geral
+            </h1>
+            <p class="page-subtitle">Indicadores consolidados</p>
+          </div>
+          <div class="alert alert-info">
+            <span class="alert-icon">🚧</span>
+            <div>Esta área será implementada na próxima etapa.</div>
+          </div>
+        </div>
+
+        <!-- =============================================
+             2️⃣ PAINEL ADMINISTRATIVO - PÁGINAS
+             ============================================= -->
+
+        <div id="page-cadastro-inquilinos" class="page">
+          <div class="content-header">
+            <h1 class="page-title">
+              <span class="icon">👤</span>
+              Cadastro de Inquilinos
+            </h1>
+            <p class="page-subtitle">Gerenciamento de cadastros</p>
+          </div>
+          <div class="alert alert-info">
+            <span class="alert-icon">🚧</span>
+            <div>Esta área será implementada na próxima etapa.</div>
+          </div>
+        </div>
+
+        <div id="page-aprovacoes" class="page">
+          <div class="content-header">
+            <h1 class="page-title">
+              <span class="icon">✅</span>
+              Aprovação / Reprovação
+            </h1>
+            <p class="page-subtitle">Análise de cadastros pendentes</p>
+          </div>
+          <div class="alert alert-info">
+            <span class="alert-icon">🚧</span>
+            <div>Esta área será implementada na próxima etapa.</div>
+          </div>
+        </div>
+
+        <div id="page-checklist" class="page">
+          <div class="content-header">
+            <h1 class="page-title">
+              <span class="icon">📋</span>
+              Checklist de Documentos
+            </h1>
+            <p class="page-subtitle">Verificação de documentação</p>
+          </div>
+          <div class="alert alert-info">
+            <span class="alert-icon">🚧</span>
+            <div>Esta área será implementada na próxima etapa.</div>
+          </div>
+        </div>
+
+        <div id="page-observacoes" class="page">
+          <div class="content-header">
+            <h1 class="page-title">
+              <span class="icon">📝</span>
+              Observações Internas
+            </h1>
+            <p class="page-subtitle">Anotações administrativas</p>
+          </div>
+          <div class="alert alert-info">
+            <span class="alert-icon">🚧</span>
+            <div>Esta área será implementada na próxima etapa.</div>
+          </div>
+        </div>
+
+        <div id="page-emissao-pdf" class="page">
+          <div class="content-header">
+            <h1 class="page-title">
+              <span class="icon">📄</span>
+              Emissão de PDFs
+            </h1>
+            <p class="page-subtitle">Geração de documentos</p>
+          </div>
+          <div class="alert alert-info">
+            <span class="alert-icon">🚧</span>
+            <div>Esta área será implementada na próxima etapa.</div>
+          </div>
+        </div>
+
+        <div id="page-reajuste-igpm" class="page">
+          <div class="content-header">
+            <h1 class="page-title">
+              <span class="icon">📊</span>
+              Reajuste IGPM
+            </h1>
+            <p class="page-subtitle">Cálculo automático de reajustes</p>
+          </div>
+          <div class="alert alert-info">
+            <span class="alert-icon">🚧</span>
+            <div>Esta área será implementada na próxima etapa.</div>
+          </div>
+        </div>
+
+        <div id="page-acoes-admin" class="page">
+          <div class="content-header">
+            <h1 class="page-title">
+              <span class="icon">🔧</span>
+              Ações Administrativas
+            </h1>
+            <p class="page-subtitle">Operações do sistema</p>
+          </div>
+          <div class="alert alert-info">
+            <span class="alert-icon">🚧</span>
+            <div>Esta área será implementada na próxima etapa.</div>
+          </div>
+        </div>
+
+        <!-- =============================================
+             3️⃣ PAINEL FINANCEIRO - PÁGINAS
+             ============================================= -->
+
+        <div id="page-pagamentos" class="page">
+          <div class="content-header">
+            <h1 class="page-title">
+              <span class="icon">💳</span>
+              Tabela de Pagamentos
+            </h1>
+            <p class="page-subtitle">Controle financeiro dos inquilinos</p>
+          </div>
+          <div class="alert alert-info">
+            <span class="alert-icon">🚧</span>
+            <div>Esta área será implementada na próxima etapa.</div>
+          </div>
+        </div>
+
+        <div id="page-comprovantes" class="page">
+          <div class="content-header">
+            <h1 class="page-title">
+              <span class="icon">📎</span>
+              Upload de Comprovantes
+            </h1>
+            <p class="page-subtitle">Anexar comprovantes de pagamento</p>
+          </div>
+          <div class="alert alert-info">
+            <span class="alert-icon">🚧</span>
+            <div>Esta área será implementada na próxima etapa.</div>
+          </div>
+        </div>
+
+        <div id="page-resumo-mensal" class="page">
+          <div class="content-header">
+            <h1 class="page-title">
+              <span class="icon">📅</span>
+              Resumo Mensal
+            </h1>
+            <p class="page-subtitle">Consolidado financeiro do mês</p>
+          </div>
+          <div class="alert alert-info">
+            <span class="alert-icon">🚧</span>
+            <div>Esta área será implementada na próxima etapa.</div>
+          </div>
+        </div>
+
+        <div id="page-graficos" class="page">
+          <div class="content-header">
+            <h1 class="page-title">
+              <span class="icon">📉</span>
+              Gráficos
+            </h1>
+            <p class="page-subtitle">Visualização de dados financeiros</p>
+          </div>
+          <div class="alert alert-info">
+            <span class="alert-icon">🚧</span>
+            <div>Esta área será implementada na próxima etapa.</div>
+          </div>
+        </div>
+
+        <div id="page-exportacao" class="page">
+          <div class="content-header">
+            <h1 class="page-title">
+              <span class="icon">📤</span>
+              Exportação Excel/PDF
+            </h1>
+            <p class="page-subtitle">Gerar relatórios para download</p>
+          </div>
+          <div class="alert alert-info">
+            <span class="alert-icon">🚧</span>
+            <div>Esta área será implementada na próxima etapa.</div>
+          </div>
+        </div>
+
+        <!-- =============================================
+             4️⃣ ÁREA DO INQUILINO - PÁGINAS
+             ============================================= -->
+
+        <div id="page-meus-dados" class="page">
+          <div class="content-header">
+            <h1 class="page-title">
+              <span class="icon">📋</span>
+              Meus Dados
+            </h1>
+            <p class="page-subtitle">Informações pessoais do inquilino</p>
+          </div>
+          <div class="alert alert-info">
+            <span class="alert-icon">🚧</span>
+            <div>Esta área será implementada na próxima etapa.</div>
+          </div>
+        </div>
+
+        <div id="page-meu-contrato" class="page">
+          <div class="content-header">
+            <h1 class="page-title">
+              <span class="icon">📄</span>
+              Meu Contrato
+            </h1>
+            <p class="page-subtitle">Visualização e download do contrato</p>
+          </div>
+          <div class="alert alert-info">
+            <span class="alert-icon">🚧</span>
+            <div>Esta área será implementada na próxima etapa.</div>
+          </div>
+        </div>
+
+        <div id="page-meus-documentos" class="page">
+          <div class="content-header">
+            <h1 class="page-title">
+              <span class="icon">📁</span>
+              Meus Documentos
+            </h1>
+            <p class="page-subtitle">Upload e gestão de documentos</p>
+          </div>
+          <div class="alert alert-info">
+            <span class="alert-icon">🚧</span>
+            <div>Esta área será implementada na próxima etapa.</div>
+          </div>
+        </div>
+
+        <div id="page-meus-pagamentos" class="page">
+          <div class="content-header">
+            <h1 class="page-title">
+              <span class="icon">💰</span>
+              Meus Pagamentos
+            </h1>
+            <p class="page-subtitle">Histórico e status de pagamentos</p>
+          </div>
+          <div class="alert alert-info">
+            <span class="alert-icon">🚧</span>
+            <div>Esta área será implementada na próxima etapa.</div>
+          </div>
+        </div>
+
+        <div id="page-minhas-notificacoes" class="page">
+          <div class="content-header">
+            <h1 class="page-title">
+              <span class="icon">🔔</span>
+              Minhas Notificações
+            </h1>
+            <p class="page-subtitle">Avisos e lembretes</p>
+          </div>
+          <div class="alert alert-info">
+            <span class="alert-icon">🚧</span>
+            <div>Esta área será implementada na próxima etapa.</div>
+          </div>
+        </div>
+
+        <div id="page-govbr" class="page">
+          <div class="content-header">
+            <h1 class="page-title">
+              <span class="icon">🏛️</span>
+              Integração Gov.br
+            </h1>
+            <p class="page-subtitle">Autenticação via Gov.br</p>
+          </div>
+          <div class="alert alert-info">
+            <span class="alert-icon">🚧</span>
+            <div>Esta área será implementada na próxima etapa.</div>
+          </div>
+        </div>
+
+        <!-- =============================================
+             5️⃣ CENTRO DE CONFIGURAÇÕES - PÁGINAS
+             ============================================= -->
+
+        <div id="page-versoes-contrato" class="page">
+          <div class="content-header">
+            <h1 class="page-title">
+              <span class="icon">📑</span>
+              Versões de Contrato
+            </h1>
+            <p class="page-subtitle">Gerenciamento de templates</p>
+          </div>
+          <div class="alert alert-info">
+            <span class="alert-icon">🚧</span>
+            <div>Esta área será implementada na próxima etapa.</div>
+          </div>
+        </div>
+
+        <div id="page-templates-email" class="page">
+          <div class="content-header">
+            <h1 class="page-title">
+              <span class="icon">✉️</span>
+              Templates de E-mail
+            </h1>
+            <p class="page-subtitle">Modelos de comunicação</p>
+          </div>
+          <div class="alert alert-info">
+            <span class="alert-icon">🚧</span>
+            <div>Esta área será implementada na próxima etapa.</div>
+          </div>
+        </div>
+
+        <div id="page-regras-notificacao" class="page">
+          <div class="content-header">
+            <h1 class="page-title">
+              <span class="icon">⏰</span>
+              Regras de Notificação
+            </h1>
+            <p class="page-subtitle">Configurar alertas automáticos</p>
+          </div>
+          <div class="alert alert-info">
+            <span class="alert-icon">🚧</span>
+            <div>Esta área será implementada na próxima etapa.</div>
+          </div>
+        </div>
+
+        <div id="page-dados-locador" class="page">
+          <div class="content-header">
+            <h1 class="page-title">
+              <span class="icon">🏢</span>
+              Dados do Locador
+            </h1>
+            <p class="page-subtitle">Informações do proprietário</p>
+          </div>
+          <div class="alert alert-info">
+            <span class="alert-icon">🚧</span>
+            <div>Esta área será implementada na próxima etapa.</div>
+          </div>
+        </div>
+
+        <div id="page-backup" class="page">
+          <div class="content-header">
+            <h1 class="page-title">
+              <span class="icon">💾</span>
+              Backup
+            </h1>
+            <p class="page-subtitle">Cópias de segurança</p>
+          </div>
+          <div class="alert alert-info">
+            <span class="alert-icon">🚧</span>
+            <div>Esta área será implementada na próxima etapa.</div>
+          </div>
+        </div>
+
+        <div id="page-logs" class="page">
+          <div class="content-header">
+            <h1 class="page-title">
+              <span class="icon">📜</span>
+              Logs de Auditoria
+            </h1>
+            <p class="page-subtitle">Histórico de ações</p>
+          </div>
+          <div class="alert alert-info">
+            <span class="alert-icon">🚧</span>
+            <div>Esta área será implementada na próxima etapa.</div>
+          </div>
+        </div>
+
+        <div id="page-parametros" class="page">
+          <div class="content-header">
+            <h1 class="page-title">
+              <span class="icon">⚙️</span>
+              Parâmetros Globais
+            </h1>
+            <p class="page-subtitle">Configurações gerais do sistema</p>
+          </div>
+          <div class="alert alert-info">
+            <span class="alert-icon">🚧</span>
+            <div>Esta área será implementada na próxima etapa.</div>
+          </div>
+        </div>
+
+      </main>
+    </div>
+  </div>
+
+  <!-- ========== SCRIPTS ========== -->
+  <script>
+    // ========== ACCORDION - TOGGLE SECTION ==========
+    function toggleSection(sectionName) {
+      const section = document.querySelector(`.nav-section[data-section="${sectionName}"]`);
+      const wasOpen = section.classList.contains('open');
+      
+      // Fechar todas as seções
+      document.querySelectorAll('.nav-section').forEach(s => {
+        s.classList.remove('open');
+      });
+      
+      // Se não estava aberta, abrir
+      if (!wasOpen) {
+        section.classList.add('open');
+      }
+    }
+
+    // ========== NAVEGAÇÃO ==========
+    function navigateTo(page, element) {
+      // Esconder todas as páginas
+      document.querySelectorAll('.page').forEach(p => {
+        p.classList.remove('active');
+      });
+
+      // Mostrar página selecionada
+      const pageEl = document.getElementById('page-' + page);
+      if (pageEl) {
+        pageEl.classList.add('active');
+      }
+
+      // Remover active de todos os nav-items
+      document.querySelectorAll('.nav-item').forEach(item => {
+        item.classList.remove('active');
+      });
+
+      // Adicionar active ao item clicado
+      if (element) {
+        element.classList.add('active');
+      }
+
+      // Atualizar seção ativa
+      const section = element ? element.closest('.nav-section') : null;
+      document.querySelectorAll('.nav-section').forEach(s => {
+        s.classList.remove('active');
+      });
+      if (section) {
+        section.classList.add('active');
+      }
+
+      // Fechar sidebar em mobile
+      if (window.innerWidth <= 768) {
+        document.getElementById('sidebar').classList.remove('open');
+      }
+    }
+
+    // ========== ABRIR SEÇÃO E NAVEGAR ==========
+    function openSection(sectionName) {
+      const section = document.querySelector(`.nav-section[data-section="${sectionName}"]`);
+      
+      // Fechar todas e abrir a selecionada
+      document.querySelectorAll('.nav-section').forEach(s => {
+        s.classList.remove('open');
+      });
+      section.classList.add('open');
+      
+      // Navegar para o primeiro item da seção
+      const firstItem = section.querySelector('.nav-item');
+      if (firstItem) {
+        firstItem.click();
+      }
+    }
+
+    // ========== NAVEGAR PARA SEÇÃO ESPECÍFICA ==========
+    function navigateToSection(sectionName, pageName) {
+      const section = document.querySelector(`.nav-section[data-section="${sectionName}"]`);
+      
+      // Abrir a seção
+      document.querySelectorAll('.nav-section').forEach(s => {
+        s.classList.remove('open');
+      });
+      section.classList.add('open');
+      
+      // Encontrar e clicar no item específico
+      const items = section.querySelectorAll('.nav-item');
+      items.forEach(item => {
+        if (item.getAttribute('onclick').includes(pageName)) {
+          item.click();
+        }
+      });
+    }
+
+    // ========== SIDEBAR TOGGLE (MOBILE) ==========
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      sidebar.classList.toggle('open');
+    }
+
+    // ========== DATA/HORA ==========
+    function updateDateTime() {
+      const now = new Date();
+      const options = {
+        weekday: 'long',
+        day: '2-digit',
+        month: 'long',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      };
+      const formatted = now.toLocaleDateString('pt-BR', options);
+      document.getElementById('datetime').textContent = formatted;
+    }
+
+    // ========== TOAST NOTIFICATION ==========
+    function showToast(message, type = 'info') {
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+      toast.innerHTML = `
+        <span>${type === 'success' ? '✅' : type === 'error' ? '❌' : 'ℹ️'}</span>
+        <span>${message}</span>
+      `;
+      document.body.appendChild(toast);
+
+      setTimeout(() => {
+        toast.style.animation = 'slideInUp 0.3s ease reverse';
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
+
+    // ========== INICIALIZAÇÃO ==========
+    document.addEventListener('DOMContentLoaded', function() {
+      updateDateTime();
+      setInterval(updateDateTime, 60000);
+    });
+
+    // Fechar sidebar ao redimensionar
+    window.addEventListener('resize', function() {
+      if (window.innerWidth > 768) {
+        document.getElementById('sidebar').classList.remove('open');
+      }
+    });
+  </script>
+</body>
+</html>
