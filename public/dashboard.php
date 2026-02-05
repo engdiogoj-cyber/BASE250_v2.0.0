@@ -339,6 +339,10 @@ $apartamentos = $stmt->fetchAll();
                 <span class="icon">📋</span>
                 <span>Novo Contrato</span>
             </a>
+            <a href="financeiro.php" class="action-btn">
+                <span class="icon">💰</span>
+                <span>Financeiro</span>
+            </a>
             <a href="inquilinos.php" class="action-btn">
                 <span class="icon">👥</span>
                 <span>Inquilinos</span>
