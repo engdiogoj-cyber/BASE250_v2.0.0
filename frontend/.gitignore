@@ -6,3 +6,5 @@ build/
 *.log
 .env.local
 .env
+sw.js
+workbox-*.js

@@ -98,7 +98,7 @@ async function generateContractPDF(contract, tenant, apartment) {
          .moveDown(0.3)
          .text('4.3. Eventuais reparos necessários deverão ser comunicados ao LOCADOR.')
          .moveDown(0.3)
-         .text('4.4. O LOCATÁRIO não poderá subloc ar ou ceder o imóvel sem autorização prévia.')
+         .text('4.4. O LOCATÁRIO não poderá sublocar ou ceder o imóvel sem autorização prévia.')
          .moveDown(0.3)
          .text('4.5. As contas de consumo (água, luz, gás) são de responsabilidade do LOCATÁRIO.')
          .moveDown(2);
