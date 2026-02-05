@@ -27,7 +27,7 @@ $stmt = $pdo->query("SELECT COALESCE(SUM(valor), 0) as total FROM pagamentos WHE
 $stats['total_atrasado'] = $stmt->fetch()['total'];
 
 // Pagamentos do mês atual
-$stmt = $pdo->query("SELECT COUNT(*) as total FROM pagamentos WHERE MONTH(mes_referencia) = MONTH(CURRENT_DATE()) AND YEAR(mes_referencia) = YEAR(CURRENT_DATE())");
+$stmt = $pdo->query("SELECT COUNT(*) as total FROM pagamentos WHERE MONTH(mes_referencia) = MONTH(CURRENT_DATE) AND YEAR(mes_referencia) = YEAR(CURRENT_DATE)");
 $stats['pagamentos_mes'] = $stmt->fetch()['total'];
 
 // Construir query de pagamentos com filtros
@@ -72,6 +72,19 @@ function getStatusLabel($status) {
         case 'cancelado': return ['label' => '❌ Cancelado', 'class' => 'cancelado'];
         default: return ['label' => $status, 'class' => ''];
     }
+}
+
+// Função para formatar mês em português
+function formatarMesReferencia($data) {
+    $meses = [
+        1 => 'Jan', 2 => 'Fev', 3 => 'Mar', 4 => 'Abr',
+        5 => 'Mai', 6 => 'Jun', 7 => 'Jul', 8 => 'Ago',
+        9 => 'Set', 10 => 'Out', 11 => 'Nov', 12 => 'Dez'
+    ];
+    $dt = new DateTime($data);
+    $mes = (int)$dt->format('n');
+    $ano = $dt->format('Y');
+    return $meses[$mes] . '/' . $ano;
 }
 
 // Função para label de forma de pagamento
@@ -575,7 +588,7 @@ function getFormaPagamentoLabel($forma) {
                                     </div>
                                 </td>
                                 <td>
-                                    <?= date('M/Y', strtotime($pag['mes_referencia'])) ?>
+                                    <?= formatarMesReferencia($pag['mes_referencia']) ?>
                                 </td>
                                 <td class="value-cell">
                                     <?= formatarDinheiro($pag['valor']) ?>
