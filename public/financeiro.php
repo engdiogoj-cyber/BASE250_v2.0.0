@@ -2,42 +2,91 @@
 require_once __DIR__ . '/../includes/config.php';
 requireLogin();
 
+// Constantes
+define('CHART_MONTHS_RANGE', 6);
+
 // Processar inserção de pagamento via POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'inserir_pagamento') {
-    $contrato_id = (int)$_POST['contrato_id'];
-    $mes_referencia = $_POST['mes_referencia'] . '-01';
-    $valor = (float)str_replace(['.', ','], ['', '.'], $_POST['valor']);
-    $valor_pago = (float)str_replace(['.', ','], ['', '.'], $_POST['valor_pago']);
-    $data_pagamento = $_POST['data_pagamento'];
-    $forma_pagamento = $_POST['forma_pagamento'];
+    // Validação dos campos obrigatórios
+    $contrato_id = isset($_POST['contrato_id']) ? (int)$_POST['contrato_id'] : 0;
+    $mes_referencia_raw = isset($_POST['mes_referencia']) ? trim($_POST['mes_referencia']) : '';
+    $valor_raw = isset($_POST['valor']) ? trim($_POST['valor']) : '';
+    $valor_pago_raw = isset($_POST['valor_pago']) ? trim($_POST['valor_pago']) : '';
+    $data_pagamento = isset($_POST['data_pagamento']) ? trim($_POST['data_pagamento']) : '';
+    $forma_pagamento = isset($_POST['forma_pagamento']) ? trim($_POST['forma_pagamento']) : '';
     
-    // Buscar data de vencimento do contrato
-    $stmtContrato = $pdo->prepare("SELECT dia_vencimento FROM contratos WHERE id = ?");
-    $stmtContrato->execute([$contrato_id]);
-    $contrato = $stmtContrato->fetch();
-    $dia_vencimento = $contrato ? $contrato['dia_vencimento'] : 10;
+    // Validações
+    $formas_validas = ['pix', 'transferencia', 'boleto', 'dinheiro', 'outro'];
+    $erros = [];
     
-    $data_vencimento = date('Y-m-' . str_pad($dia_vencimento, 2, '0', STR_PAD_LEFT), strtotime($mes_referencia));
-    $status = $data_pagamento ? 'pago' : 'pendente';
+    if ($contrato_id <= 0) {
+        $erros[] = 'Contrato inválido';
+    }
     
-    $stmtInsert = $pdo->prepare("
-        INSERT INTO pagamentos (contrato_id, mes_referencia, valor, valor_pago, data_vencimento, data_pagamento, status, forma_pagamento)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-    ");
-    $stmtInsert->execute([
-        $contrato_id,
-        $mes_referencia,
-        $valor,
-        $valor_pago ?: null,
-        $data_vencimento,
-        $data_pagamento ?: null,
-        $status,
-        $forma_pagamento
-    ]);
+    if (!preg_match('/^\d{4}-\d{2}$/', $mes_referencia_raw)) {
+        $erros[] = 'Mês de referência inválido';
+    }
     
-    logAcao($pdo, 'inserir_pagamento', "Pagamento inserido para contrato {$contrato_id}");
-    header('Location: financeiro.php?msg=pagamento_inserido');
-    exit;
+    // Converter valor (formato brasileiro para float)
+    $valor = (float)str_replace(['.', ','], ['', '.'], $valor_raw);
+    if ($valor <= 0) {
+        $erros[] = 'Valor deve ser maior que zero';
+    }
+    
+    $valor_pago = $valor_pago_raw ? (float)str_replace(['.', ','], ['', '.'], $valor_pago_raw) : null;
+    if ($valor_pago !== null && $valor_pago < 0) {
+        $erros[] = 'Valor pago não pode ser negativo';
+    }
+    
+    if (!in_array($forma_pagamento, $formas_validas)) {
+        $erros[] = 'Forma de pagamento inválida';
+    }
+    
+    // Validar data de pagamento se fornecida
+    if ($data_pagamento && !preg_match('/^\d{4}-\d{2}-\d{2}$/', $data_pagamento)) {
+        $erros[] = 'Data de pagamento inválida';
+    }
+    
+    // Verificar se contrato existe
+    if (empty($erros)) {
+        $stmtContrato = $pdo->prepare("SELECT dia_vencimento FROM contratos WHERE id = ? AND status = 'ativo'");
+        $stmtContrato->execute([$contrato_id]);
+        $contrato = $stmtContrato->fetch();
+        
+        if (!$contrato) {
+            $erros[] = 'Contrato não encontrado ou inativo';
+        }
+    }
+    
+    if (empty($erros)) {
+        $mes_referencia = $mes_referencia_raw . '-01';
+        $dia_vencimento = $contrato['dia_vencimento'] ?: 10;
+        $data_vencimento = date('Y-m-' . str_pad($dia_vencimento, 2, '0', STR_PAD_LEFT), strtotime($mes_referencia));
+        $status = $data_pagamento ? 'pago' : 'pendente';
+        
+        $stmtInsert = $pdo->prepare("
+            INSERT INTO pagamentos (contrato_id, mes_referencia, valor, valor_pago, data_vencimento, data_pagamento, status, forma_pagamento)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        ");
+        $stmtInsert->execute([
+            $contrato_id,
+            $mes_referencia,
+            $valor,
+            $valor_pago,
+            $data_vencimento,
+            $data_pagamento ?: null,
+            $status,
+            $forma_pagamento
+        ]);
+        
+        logAcao($pdo, 'inserir_pagamento', "Pagamento inserido para contrato {$contrato_id}");
+        header('Location: financeiro.php?msg=pagamento_inserido');
+        exit;
+    } else {
+        // Redirecionar com erro
+        header('Location: financeiro.php?msg=erro&erro=' . urlencode(implode(', ', $erros)));
+        exit;
+    }
 }
 
 // Filtros (padrão: todos)
@@ -95,9 +144,9 @@ $stmt = $pdo->prepare("SELECT COUNT(*) as total FROM pagamentos WHERE DATE_FORMA
 $stmt->execute([$mesAtual]);
 $stats['pagamentos_mes'] = $stmt->fetch()['total'];
 
-// Dados para gráficos (últimos 6 meses)
+// Dados para gráficos (últimos CHART_MONTHS_RANGE meses)
 $chartData = [];
-for ($i = 5; $i >= 0; $i--) {
+for ($i = CHART_MONTHS_RANGE - 1; $i >= 0; $i--) {
     $mesChart = date('Y-m', strtotime("-{$i} months"));
     $stmtChart = $pdo->prepare("
         SELECT 
@@ -239,13 +288,20 @@ function getFormaPagamentoLabel($forma) {
     }
 }
 
-// Mensagens de sucesso
+// Mensagens de sucesso/erro
 $mensagem = '';
+$tipoMensagem = 'success';
 if (isset($_GET['msg'])) {
     if ($_GET['msg'] === 'pagamento_inserido') {
         $mensagem = '✅ Pagamento inserido com sucesso!';
+    } elseif ($_GET['msg'] === 'erro') {
+        $mensagem = '❌ Erro: ' . htmlspecialchars($_GET['erro'] ?? 'Erro desconhecido');
+        $tipoMensagem = 'error';
     }
 }
+
+// Nome do mês atual em português
+$mesAtualPt = formatarMesReferencia(date('Y-m-01'));
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -939,7 +995,7 @@ if (isset($_GET['msg'])) {
     
     <main class="main">
         <?php if ($mensagem): ?>
-            <div class="alert"><?= $mensagem ?></div>
+            <div class="alert <?= $tipoMensagem === 'error' ? 'error' : '' ?>"><?= $mensagem ?></div>
         <?php endif; ?>
         
         <!-- Estatísticas Financeiras (Clicáveis) -->
@@ -966,13 +1022,13 @@ if (isset($_GET['msg'])) {
                 <div class="icon">📊</div>
                 <div class="number"><?= $stats['pagamentos_mes'] ?></div>
                 <div class="label">Pagamentos do Mês</div>
-                <div class="sublabel"><?= date('F/Y') ?></div>
+                <div class="sublabel"><?= $mesAtualPt ?></div>
             </div>
         </div>
         
         <!-- Gráfico -->
         <div class="chart-section">
-            <div class="chart-header">📉 Evolução Financeira (Últimos 6 meses)</div>
+            <div class="chart-header">📉 Evolução Financeira (Últimos <?= CHART_MONTHS_RANGE ?> meses)</div>
             <div class="chart-container">
                 <canvas id="financeChart"></canvas>
             </div>
@@ -1332,24 +1388,32 @@ if (isset($_GET['msg'])) {
             window.location = url.toString();
         }
         
-        // Preencher valor automaticamente ao selecionar contrato
-        document.getElementById('contrato_id').addEventListener('change', function() {
-            const option = this.options[this.selectedIndex];
-            const valor = option.dataset.valor;
-            if (valor) {
-                document.getElementById('valor').value = parseFloat(valor).toLocaleString('pt-BR', {minimumFractionDigits: 2});
-                document.getElementById('valor_pago').value = parseFloat(valor).toLocaleString('pt-BR', {minimumFractionDigits: 2});
-            }
-        });
-        
-        // Formatar campo de valor
+        // Formatar campo de valor (formato brasileiro: 1.234,56)
         function formatCurrency(input) {
             let value = input.value.replace(/\D/g, '');
+            if (value === '') {
+                input.value = '';
+                return;
+            }
             value = (parseInt(value) / 100).toFixed(2);
             value = value.replace('.', ',');
             value = value.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
             input.value = value;
         }
+        
+        // Preencher valor automaticamente ao selecionar contrato
+        document.getElementById('contrato_id').addEventListener('change', function() {
+            const option = this.options[this.selectedIndex];
+            const valor = option.dataset.valor;
+            if (valor) {
+                // Formatar no mesmo padrão que formatCurrency
+                const valorFloat = parseFloat(valor);
+                let valorFormatado = valorFloat.toFixed(2).replace('.', ',');
+                valorFormatado = valorFormatado.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+                document.getElementById('valor').value = valorFormatado;
+                document.getElementById('valor_pago').value = valorFormatado;
+            }
+        });
         
         document.getElementById('valor').addEventListener('input', function() { formatCurrency(this); });
         document.getElementById('valor_pago').addEventListener('input', function() { formatCurrency(this); });
