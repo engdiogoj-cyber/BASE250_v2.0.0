@@ -1,0 +1,110 @@
+# ====================================
+# BASE250 - .gitignore
+# ====================================
+
+# -------------------------------------
+# CONFIGURAÇÕES SENSÍVEIS (NUNCA VERSIONAR!)
+# -------------------------------------
+config.php
+includes/config.php
+*.env
+.env
+.env.*
+
+# -------------------------------------
+# UPLOADS DOS USUÁRIOS
+# -------------------------------------
+public/uploads/*
+!public/uploads/.gitkeep
+uploads/*
+!uploads/.gitkeep
+
+# -------------------------------------
+# LOGS
+# -------------------------------------
+*.log
+logs/
+error_log
+php_errors.log
+
+# -------------------------------------
+# CACHE
+# -------------------------------------
+cache/
+*.cache
+.phpunit.result.cache
+
+# -------------------------------------
+# DEPENDÊNCIAS (se usar Composer)
+# -------------------------------------
+/vendor/
+composer.lock
+
+# -------------------------------------
+# IDEs E EDITORES
+# -------------------------------------
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+*.swp
+*.swo
+*~
+.project
+.settings/
+
+# -------------------------------------
+# SISTEMA OPERACIONAL
+# -------------------------------------
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# -------------------------------------
+# BACKUPS
+# -------------------------------------
+*.bak
+*.backup
+*.old
+*.orig
+*~
+
+# -------------------------------------
+# TEMPORÁRIOS
+# -------------------------------------
+tmp/
+temp/
+*.tmp
+
+# -------------------------------------
+# BANCO DE DADOS (backups locais)
+# -------------------------------------
+*.sql
+!database/schema.sql
+!database/seed.sql
+!database/migrations/*.sql
+
+# -------------------------------------
+# DOCUMENTAÇÃO PRIVADA
+# -------------------------------------
+docs/private/
+NOTES.md
+TODO.md
+
+# -------------------------------------
+# TESTES
+# -------------------------------------
+coverage/
+.phpunit/
+
+# -------------------------------------
+# ARQUIVOS DE BUILD
+# -------------------------------------
+node_modules/
+dist/
+build/
