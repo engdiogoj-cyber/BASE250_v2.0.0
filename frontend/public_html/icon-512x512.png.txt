@@ -1,0 +1,6 @@
+# Placeholder for icon-512x512.png
+# This should be replaced with an actual 512x512 PNG icon for the PWA
+# You can create one using:
+# - An online icon generator
+# - Design tools like Figma, Photoshop, or GIMP
+# - Convert from SVG using ImageMagick: convert -resize 512x512 logo.svg icon-512x512.png

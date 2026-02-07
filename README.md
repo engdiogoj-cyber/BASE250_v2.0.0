@@ -198,14 +198,32 @@ BASE250_v2.0.0/
 │   │   ├── styles/
 │   │   │   └── globals.css
 │   │   └── components/
-│   ├── public/
-│   │   └── manifest.json      # PWA manifest
+│   ├── public -> public_html  # Symlink para Next.js
+│   ├── public_html/          # Diretório real de assets estáticos
+│   │   └── manifest.json     # PWA manifest
 │   ├── package.json
-│   ├── next.config.js         # Configuração PWA
+│   ├── next.config.js        # Configuração Next.js
+│   ├── deploy-to-public-html.sh  # Script de deploy
 │   └── Dockerfile
 ├── docker-compose.yml
 └── README.md
 ```
+
+## 📁 Nota sobre o Diretório public_html
+
+O frontend usa `public_html` como diretório real para assets estáticos, com um symlink `public` para compatibilidade com Next.js:
+
+- **public_html/** - Diretório real contendo `manifest.json` e outros assets
+- **public** - Symlink apontando para `public_html`
+- **Motivo**: Compatibilidade com hospedagem tradicional (cPanel) que requer `public_html`
+
+Para deployment em servidores que requerem `public_html`, use o script:
+```bash
+cd frontend
+./deploy-to-public-html.sh
+```
+
+Veja `frontend/PUBLIC_DIRECTORY.md` para mais detalhes.
 
 ## 🔧 Configuração do WhatsApp (Twilio)
 

@@ -1,0 +1,6 @@
+# Placeholder for icon-192x192.png
+# This should be replaced with an actual 192x192 PNG icon for the PWA
+# You can create one using:
+# - An online icon generator
+# - Design tools like Figma, Photoshop, or GIMP
+# - Convert from SVG using ImageMagick: convert -resize 192x192 logo.svg icon-192x192.png
