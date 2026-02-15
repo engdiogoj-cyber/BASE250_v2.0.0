@@ -1,152 +1,155 @@
-<div align="center">
+# BASE250 – Sistema de Gestão de Apartamentos
 
-# 🏢 BASE250
+Sistema completo para gerenciamento de apartamentos com área administrativa e site público dinâmico.
 
-### Sistema Profissional de Gestão de Imóveis
+> **Modernização v2.0** - Sistema atualizado com backend PHP, banco de dados MySQL e área administrativa completa.
 
-[![PHP Version](https://img.shields.io/badge/PHP-8.0%2B-777BB4?logo=php)](https://php.net)
-[![MySQL](https://img.shields.io/badge/MySQL-8.0%2B-4479A1?logo=mysql)](https://mysql.com)
-[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/Version-2.0.0-blue.svg)](CHANGELOG.md)
+> Domínio: `base250.com`  
+> E-mail oficial: `contato@base250.br`  
+> Hosting: Hostinger (hpanel) ou servidor PHP  
+> Ferramentas: ChatGPT, Claude, GitHub Copilot
 
-[Demonstração](#) · [Documentação](#documentação) · [Reportar Bug](https://github.com/engdiogoj-cyber/BASE250_v2.0.0/issues) · [Solicitar Funcionalidade](https://github.com/engdiogoj-cyber/BASE250_v2.0.0/issues)
+## 🎯 Principais Funcionalidades
 
-</div>
+### Site Público
+- ✅ Listagem dinâmica de apartamentos
+- ✅ Galeria de fotos interativa (navegação, indicadores, contador)
+- ✅ Design moderno e responsivo
+- ✅ Apartamentos alugados aparecem mas sem preço/botão
+- ✅ Integração com banco de dados MySQL
 
----
+### Área Administrativa
+- ✅ Sistema de login seguro
+- ✅ Dashboard com estatísticas
+- ✅ CRUD completo de apartamentos
+- ✅ Toggle de status (disponível/alugado)
+- ✅ Gerenciamento de galeria de fotos
+- ✅ Gerenciamento de características
 
-## 📋 Sobre o Projeto
+## 📦 Tecnologias
 
-BASE250 é um sistema completo e profissional para gestão de imóveis, desenvolvido com arquitetura PHP MVC moderna. Oferece controle total sobre cadastros, contratos, pagamentos e documentação de inquilinos, com interface responsiva e design system proprietário.
+- **Frontend**: HTML5, CSS3, JavaScript (Vanilla)
+- **Backend**: PHP 7.4+ com PDO
+- **Banco de Dados**: MySQL 5.7+ / MariaDB 10.3+
+- **Autenticação**: Session-based com bcrypt
+- **API**: RESTful JSON
 
-### ✨ Funcionalidades Principais
+## 🚀 Instalação Rápida
 
-- 🏠 **Painel Geral**: Dashboard com métricas e notificações em tempo real
-- ⚙️ **Administrativo**: Gestão de cadastros, aprovações, documentos e contratos
-- 💰 **Financeiro**: Controle de pagamentos, comprovantes e relatórios
-- 👥 **Área do Inquilino**: Portal self-service com integração Gov.br
-- 🔧 **Configurações**: Templates, backup, logs de auditoria e parâmetros
+### 1. Verificar Requisitos
 
----
+```bash
+./verify-install.sh
+```
 
-## 🏗️ Arquitetura
+### 2. Configurar Banco de Dados
+
+```bash
+# Criar banco
+mysql -u root -p -e "CREATE DATABASE base250 CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+
+# Criar tabelas
+mysql -u root -p base250 < database/schema.sql
+
+# Popular dados iniciais (14 apartamentos)
+mysql -u root -p base250 < database/seed.sql
+```
+
+### 3. Configurar Conexão
+
+Edite `backend/config/database.php` com suas credenciais:
+
+```php
+define('DB_HOST', 'localhost');
+define('DB_NAME', 'base250');
+define('DB_USER', 'seu_usuario');
+define('DB_PASS', 'sua_senha');
+```
+
+### 4. Acessar Sistema
+
+- **Site Público**: `http://localhost/frontend/site_publico/index.php`
+- **Admin**: `http://localhost/backend/admin/login.php`
+
+**Credenciais padrão:**
+- Email: `admin@base250.com`
+- Senha: `admin123`
+
+⚠️ **Altere a senha após primeiro acesso!**
+
+## 📚 Documentação Completa
+
+- [Setup e Instalação](backend/SETUP.md) - Guia detalhado de instalação
+- [Documentação da API](backend/API.md) - Endpoints e exemplos de uso
+
+## Regras de privacidade (importante)
+- Tudo que é sensível fica em:
+  - `docs_private/` (não subir para GitHub)
+  - `.env` (não subir para GitHub)
+  - `backend/config/database.php` (configurar localmente)
+- No GitHub ficarão apenas arquivos com placeholders.
+
+## Estrutura do Projeto
 
 ```
 BASE250_v2.0.0/
-├── config/          # Configurações e rotas
-├── src/             # Código-fonte (MVC)
-│   ├── Controllers/
-│   ├── Models/
-│   ├── Middleware/
-│   └── Helpers/
-├── public/          # Entry point e assets
-│   ├── index.php
-│   ├── .htaccess
-│   └── assets/
-│       ├── css/
-│       ├── js/
-│       └── images/
-├── templates/       # Templates PHP
-│   ├── layout.php
-│   ├── components/
-│   └── pages/
-└── docs/            # Documentação
+├─ README.md
+├─ LICENSE
+├─ CONTRIBUTING.md
+├─ .gitignore
+├─ verify-install.sh          # Script de verificação
+├─ docs/
+├─ docs_private/              # (IGNORADO - dados sensíveis)
+├─ assets/images/
+├─ frontend/
+│  ├─ site_publico/
+│  │  ├─ index.php           # Página pública modernizada
+│  │  └─ index.html.backup   # Backup do HTML original
+│  └─ painel/
+├─ backend/
+│  ├─ SETUP.md               # Guia de instalação
+│  ├─ API.md                 # Documentação da API
+│  ├─ config/
+│  │  ├─ database.php        # Configuração do banco
+│  │  └─ .env.example.php    # Exemplo de configuração
+│  ├─ api/
+│  │  ├─ apartamentos.php        # GET: Listar apartamentos
+│  │  ├─ update_apartamento.php  # POST: Atualizar apartamento
+│  │  └─ update_status.php       # POST: Alterar status
+│  ├─ admin/
+│  │  ├─ login.php           # Página de login
+│  │  ├─ logout.php          # Logout
+│  │  ├─ index.php           # Dashboard
+│  │  └─ edit.php            # Editar apartamento
+│  └─ includes/
+│     └─ auth.php            # Funções de autenticação
+├─ database/
+│  ├─ schema.sql             # Estrutura do banco (14 tabelas)
+│  └─ seed.sql               # Dados iniciais (14 apartamentos)
+└─ scripts/
 ```
 
-### 🎨 Design System
+## 🔒 Segurança
 
-- **Cor Primária**: `#16697A` (BASE250 Teal)
-- **Tipografia**: Inter (Google Fonts)
-- **Framework**: Custom CSS (Design System v1.0)
-- **Responsividade**: Mobile-first
+- ✅ Prepared statements (proteção contra SQL Injection)
+- ✅ Sanitização de inputs (proteção contra XSS)
+- ✅ Senhas criptografadas com bcrypt
+- ✅ Sessões configuradas com segurança
+- ✅ Validação de dados no backend
 
----
+**Recomendações para Produção:**
+1. Use HTTPS
+2. Altere senhas padrão
+3. Configure permissões de arquivo adequadas
+4. Desative `display_errors`
+5. Configure backups automáticos
 
-## 🚀 Instalação
+## 🐛 Suporte
 
-### Requisitos
-
-- PHP 8.0 ou superior
-- MySQL 8.0+ / MariaDB 10.5+
-- Servidor web (Apache/Nginx)
-
-### Passos
-
-1. **Clone o repositório**
-   ```bash
-   git clone https://github.com/engdiogoj-cyber/BASE250_v2.0.0.git
-   cd BASE250_v2.0.0
-   ```
-
-2. **Configure o banco de dados**
-   ```bash
-   # Edite config/database.php com suas credenciais
-   nano config/database.php
-   ```
-
-3. **Importe o schema** (quando disponível)
-   ```bash
-   mysql -u usuario -p base250_db < database/schema.sql
-   ```
-
-4. **Configure o servidor web**
-   - **Apache**: Use o `.htaccess` incluído em `public/`
-   - **Nginx**: Veja `docs/DEPLOYMENT.md`
-
-5. **Acesse o sistema**
-   ```
-   http://localhost/BASE250_v2.0.0/public/
-   ```
-
-**Credenciais padrão**: Sistema em demonstração (sem autenticação por enquanto)
-
----
-
-## 📖 Documentação
-
-- [📐 Arquitetura](docs/ARCHITECTURE.md)
-- [🚀 Deploy](docs/DEPLOYMENT.md)
-- [🔒 Segurança](docs/SECURITY.md)
-
----
-
-## 🛡️ Segurança
-
-- ✅ Proteção CSRF em todos os formulários
-- ✅ Prepared Statements (proteção SQL Injection)
-- ✅ Sanitização de entrada (proteção XSS)
-- ✅ Sessões seguras com HTTPOnly e Secure flags
-- ✅ Validação de CPF e email
-
-Para reportar vulnerabilidades: [contato@base250.com](mailto:contato@base250.com)
-
----
-
-## 🤝 Contribuindo
-
-Contribuições são bem-vindas! Veja [CONTRIBUTING.md](CONTRIBUTING.md) para detalhes.
-
----
+Para dúvidas ou problemas:
+- Email: floripamoso@gmail.com
+- WhatsApp: (48) 99935-2627
 
 ## 📄 Licença
 
-Este projeto está sob a licença MIT. Veja [LICENSE](LICENSE) para mais informações.
-
----
-
-## 👤 Autor
-
-**Eng. Diogo**
-
-- GitHub: [@engdiogoj-cyber](https://github.com/engdiogoj-cyber)
-- Email: contato@base250.com
-
----
-
-<div align="center">
-
-Desenvolvido com ❤️ por [Eng. Diogo](https://github.com/engdiogoj-cyber)
-
-⭐ Se este projeto foi útil, considere dar uma estrela!
-
-</div>
+Este projeto é propriedade de BASE250. Todos os direitos reservados.

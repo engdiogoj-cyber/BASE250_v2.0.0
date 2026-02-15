@@ -37,17 +37,24 @@ CREATE TABLE IF NOT EXISTS `apartamentos` (
     `id` INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     `numero` VARCHAR(10) NOT NULL UNIQUE,
     `andar` INT,
+    `tipo` VARCHAR(50) NOT NULL DEFAULT 'Studio', -- 'Studio', 'Loft', 'Apartamento'
     `metragem` DECIMAL(6,2),
     `quartos` INT DEFAULT 1,
+    `banheiros` INT DEFAULT 1,
     `vagas_garagem` INT DEFAULT 0,
-    `status` ENUM('disponivel', 'ocupado', 'manutencao', 'reservado') DEFAULT 'disponivel',
+    `status` ENUM('disponivel', 'alugado', 'ocupado', 'manutencao', 'reservado') DEFAULT 'disponivel',
     `valor_base` DECIMAL(10,2),
+    `preco` DECIMAL(10,2), -- Preço público de listagem
+    `descricao` TEXT,
+    `features` JSON, -- ['Geladeira', 'Ar condicionado', etc]
+    `galeria_fotos` JSON, -- ['url1', 'url2', etc]
     `observacoes` TEXT,
     `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     
     INDEX `idx_numero` (`numero`),
-    INDEX `idx_status` (`status`)
+    INDEX `idx_status` (`status`),
+    INDEX `idx_tipo` (`tipo`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- =============================================

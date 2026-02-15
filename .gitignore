@@ -73,6 +73,7 @@ Desktop.ini
 *.old
 *.orig
 *~
+index.html.backup
 
 # -------------------------------------
 # TEMPORÁRIOS
