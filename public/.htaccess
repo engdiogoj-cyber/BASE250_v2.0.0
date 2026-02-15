@@ -1,0 +1,39 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+    
+    # Redirecionar para HTTPS (descomentar em produção)
+    # RewriteCond %{HTTPS} off
+    # RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+    
+    # Não reescrever para arquivos e diretórios existentes
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    
+    # Reescrever tudo para index.php
+    RewriteRule ^(.*)$ index.php [QSA,L]
+</IfModule>
+
+# Segurança: Prevenir listagem de diretórios
+Options -Indexes
+
+# Segurança: Proteger arquivos sensíveis
+<FilesMatch "\.(env|log|ini|conf)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Performance: Habilitar compressão
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/json
+</IfModule>
+
+# Cache para assets estáticos
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType image/svg+xml "access plus 1 year"
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+</IfModule>
